@@ -1,53 +1,66 @@
 @extends('layouts.main')
 
 @section('container')
-    <div class="pagetitle">
-        <h1>Transaksi</h1>
-        <nav>
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-            <li class="breadcrumb-item active">Transaksi</li>
-          </ol>
-        </nav>
-      </div><!-- End Page Title -->
-      
+  <div class="pagetitle">
+    <h1>Transaksi</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item active">Transaksi</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
 
-    <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="card">
-            <div class="card-body">
-              
-              <div class="col-md-4">
-                <table>
-                  <tr>
-                    <td><h5 class="card-title">No. Invoice</h5></td>
-                    <td><h5 class="card-title">:</h5></td>
-                    <td id="no_invoice"></td>
-                  </tr>
-                  <tr>
-                    <td><h5 class="card-title">Tanggal</h5></td>
-                    <td><h5 class="card-title">:</h5></td>
-                    <td id="tgl"></td>
-                  </tr>
-                  <tr>
-                    <td><h5 class="card-title">Customer</h5></td>
-                    <td><h5 class="card-title">:</h5></td>
-                    <td>
-                      <select id="inputState" class="form-select" id="customer_id" name="customer_id" >
-                        <option selected>Choose Customer</option>
-                        @foreach ($customers as $cus)
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+
+            <div class="col-md-4">
+              <table>
+                <tr>
+                  <td>
+                    <h5 class="card-title">No. Invoice</h5>
+                  </td>
+                  <td>
+                    <h5 class="card-title">:</h5>
+                  </td>
+                  <td id="no_invoice"></td>
+                </tr>
+                <tr>
+                  <td>
+                    <h5 class="card-title">Tanggal</h5>
+                  </td>
+                  <td>
+                    <h5 class="card-title">:</h5>
+                  </td>
+                  <td id="tgl"></td>
+                </tr>
+                <tr>
+                  <td>
+                    <h5 class="card-title">Customer</h5>
+                  </td>
+                  <td>
+                    <h5 class="card-title">:</h5>
+                  </td>
+                  <td>
+                    <select id="inputState" class="form-select" id="customer_id" name="customer_id">
+                      <option selected>Choose Customer</option>
+                      @foreach ($customers as $cus)
                         <option value="{{ $cus->id }}">{{ $cus->nama }}</option>
-                      -
-                        @endforeach
-                      </select></td>
-                  </tr>
-                </table>
-              </div>
-              <form class="row g-3" action="/transaksi" method="POST">
-                @csrf
-                <input type="hidden" name="id">
-                {{-- <input type="hidden" name="no_invoice" value="001"> --}}
+                        -
+                      @endforeach
+                    </select>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <form class="row g-3" action="/transaksi" method="POST">
+              @csrf
+              <input type="hidden" name="id">
+              {{-- <input type="hidden" name="no_invoice" value="001"> --}}
               {{-- <div class="col-md-6">
                 <div class="form-floating">
                   <input type="text" class="form-control @error('kuantitas') is-invalid @enderror" id="kuantitas" name="kuantitas" value="{{ old('kuantitas') }}"  placeholder="Total Jumlah Barang">
@@ -59,8 +72,8 @@
                 <div class="form-floating mb-3">
                   <select class="form-select"id="produk_id" name="produk_id" aria-label="level">
                     @foreach ($items as $item)
-                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                  -
+                      <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                      -
                     @endforeach
                   </select>
                   <label for="produk_id">Produk</label>
@@ -91,45 +104,64 @@
                 <button type="submit" class="btn btn-primary" name="submit">Tambah</button>
                 {{-- <button type="reset" class="btn btn-secondary">Reset</button> --}}
               </div>
-              </form><!-- End floating Labels Form -->
+            </form><!-- End floating Labels Form -->
 
-              <!-- Table with stripped rows -->
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Nama Barang</th>
-                    <th scope="col">Harga</th>
-                    <th scope="col">QTY</th>
-                    <th scope="col">Subtotal</th>
-                  </tr>
-                </thead>
-                <tbody>@foreach ($penjualans as $pjl) 
+            <!-- Table with stripped rows -->
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Nama Barang</th>
+                  <th scope="col">Harga</th>
+                  <th scope="col">QTY</th>
+                  <th scope="col">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($penjualans as $pjl)
                   <tr>
                     <th scope="row"></th>
 
                     @foreach ($items as $item)
-                    @if ($item->id==$pjl['produk_id'])
-                    
-                    <td>
-                        {{ $item->nama }}
-                    </td>
-                        
-                    @endif
+                      @if ($item->id == $pjl['produk_id'])
+                        <td>
+                          {{ $item->nama }}
+                        </td>
+                      @endif
                     @endforeach
                     <td>{{ $pjl['harga'] }}</td>
                     <td>{{ $pjl['kuantitas'] }}</td>
                     <td>{{ $pjl['subtotal'] }}</td>
                   </tr>
-                  @endforeach
-                </tbody>
-              </table>
-              <!-- End Table with stripped rows -->
+                @endforeach
+              </tbody>
+            </table>
+            <!-- End Table with stripped rows -->
 
-            </div>
           </div>
-
         </div>
+
       </div>
-    </section>
+    </div>
+  </section>
 @endsection
+
+@push('custom-js')
+  <script>
+    $(document).ready(function() {
+      function getCokiee() {
+        $.ajax({
+          url: "{{ route('get_kasir') }}",
+          dataType: 'json',
+          success: function(response) {
+            console.log(response);
+            $('#id').html(response['id']);
+            $('#tgl').html(response['tanggal']);
+          }
+        });
+      }
+
+      getCokiee();
+    });
+  </script>
+@endpush
