@@ -12,7 +12,8 @@ use App\Http\Controllers\ProdukMasukController;
 use App\Http\Controllers\ProdukKeluarController;
 use App\Http\Controllers\PenjualanController;
 use Illuminate\Support\Facades\Route;
-Use App\Models\item;
+use App\Models\item;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,16 +26,20 @@ Use App\Models\item;
 |
 */
 
+Route::get('/foo', function () {
+  Artisan::call('storage:link');
+});
+
 Route::get('/', function () {
-    return view('login.index', [
-        "title" => "Home"
-    ]);
+  return view('login.index', [
+    "title" => "Home"
+  ]);
 })->middleware('guest');
 
 Route::get('/home', function () {
-    return view('home', [
-        "title" => "Home"
-    ]);
+  return view('home', [
+    "title" => "Home"
+  ]);
 })->middleware('auth');
 
 
@@ -96,12 +101,18 @@ Route::post('/tambah-produk-keluar', [ProdukKeluarController::class, 'store']);
 
 Route::get('/transaksi', [PenjualanController::class, 'index']);
 Route::post('/transaksi', [PenjualanController::class, 'store']);
+Route::get('/get-kasir', [PenjualanController::class, 'get_kasir'])->name('get_kasir');
+Route::post('/get-kasir/{id}', [PenjualanController::class, 'set_kasir'])->name('set_kasir');
+Route::get('get-kasir/datatable', [PenjualanController::class, 'get_kasir_datatable'])->name('get_kasir.datatable');
+Route::get('transaksi/get-barang', [PenjualanController::class, 'get_barang'])->name('kasir.get_barang');
+Route::post('update-kasir/{id}', [PenjualanController::class, 'update_kasir'])->name('update_kasir');
+Route::get('delete-kasir/{id}', [PenjualanController::class, 'delete_kasir'])->name('delete_kasir');
 
 
 Route::get('/get_kasir', [PenjualanController::class, 'get_kasir']);
 
 Route::get('/laporan', function () {
-    return view('Laporan', [
-        "title" => "laporan"
-    ]);
+  return view('Laporan', [
+    "title" => "laporan"
+  ]);
 });

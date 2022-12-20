@@ -25,43 +25,6 @@ class PenjualanController extends Controller
     $title = "Transaksi";
     $items = item::all();
 
-
-    $rules = ([
-      'no_invoice' => 'min:5',
-      // 'customer_id' => 'required',
-      'tanggal_keluar' => 'min:5'
-    ]);
-
-    $validateData = $request->validate($rules);
-
-
-    $lifetime = time() + 60 * 60 * 24 * 365; // one year
-    $id = hexdec(uniqid());
-    $tanggal = Carbon::now();
-
-
-    // $validateData['customer_id'] = 1;
-    $validateData['no_invoice'] = hexdec(uniqid());
-    // $validateData['tanggal_keluar'] = $tanggal->isoFormat('D MMMM Y');
-    $validateData['tanggal_keluar'] = $tanggal->toDateTimeString();
-    // dd($validateData['tanggal_keluar']);
-
-    Laporan::Create($validateData);
-
-    // return view('supplier.supplier', [
-    //     "title" => "Suppliers",
-    //     "supplier" => $supplier
-    // ]);
-
-
-    // public function show(Customer $customer)
-    // {
-    //     return view('customer.customer', [
-    //         "title" => "Customers",
-    //         "customer" => $customer
-    //     ]);
-    // }
-
     return view('transaksi', compact("penjualans", "customers", "title", "items"));
   }
 
@@ -87,12 +50,11 @@ class PenjualanController extends Controller
 
         $data['barang'][$id_barang] = [
           "id" => $barang->id,
-          "nama" => $barang->nama_barang,
-          "kode" => $barang->kode_scan,
+          "nama" => $barang->nama,
           "jumlah" => 1,
-          "harga_jual" => $barang->harga_jual,
-          "stok" => $barang->stok,
-          "total" => $barang->harga_jual * 1
+          "harga" => $barang->harga,
+          "stok" => $barang->kuantitas,
+          "total" => $barang->harga * 1
         ];
         $array_json = json_encode($data);
         Cookie::queue('transaksi', $array_json, $lifetime);
@@ -108,16 +70,15 @@ class PenjualanController extends Controller
   {
     $lifetime = time() + 60 * 60 * 24 * 365; // one year
     $data = json_decode(Cookie::get('transaksi'), true);
-    $barang =  Barang::where('id', $id_barang)->first();
+    $barang =  item::where('id', $id_barang)->first();
 
     $data['barang'][$id_barang] = [
       "id" => $barang->id,
-      "nama" => $barang->nama_barang,
-      "kode" => $barang->kode_scan,
+      "nama" => $barang->nama,
       "jumlah" => $request->jumlah,
-      "harga_jual" => $barang->harga_jual,
-      "stok" => $barang->stok,
-      "total" => $barang->harga_jual * $request->jumlah
+      "harga" => $barang->harga,
+      "stok" => $barang->kuantitas,
+      "total" => $barang->harga * 1
     ];
     $array_json = json_encode($data);
     Cookie::queue('transaksi', $array_json, $lifetime);
@@ -140,6 +101,13 @@ class PenjualanController extends Controller
     return [
       'status'     => 'Data telah Dihapus',
     ];
+  }
+
+  public function get_kasir_datatable()
+  {
+    $kasirs = json_decode($this->get_kasir(), true);
+    $datas = $kasirs['barang'] != null ? $kasirs['barang'] : null;
+    return view('kasir_datatable', compact('datas'));
   }
 
   public function get_kasir()
@@ -182,5 +150,27 @@ class PenjualanController extends Controller
     // $request->session()->flash('success', 'Registrasi Berhasil! Silahkan Login!');
 
     return redirect('/transaksi')->with('success', 'Produk berhasil ditambahkan!');
+  }
+
+  public function get_barang(Request $request)
+  {
+    $records = item::where('nama', 'like', '%' . $request->search . '%')
+      ->get();
+    $data_arr = array();
+    foreach ($records as $record) {
+      $id = $record->id;
+      $nama_barang = $record->nama;
+      $harga = $record->harga;
+      $stok = $record->kuantitas;
+
+      $data_arr[] = array(
+        "id" => $id,
+        "text" => $nama_barang,
+        "label" => $nama_barang,
+        "harga_jual" => $harga,
+        "stok" => $stok
+      );
+    }
+    return json_encode($data_arr);
   }
 }
