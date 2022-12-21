@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class itemController extends Controller
 {
@@ -54,24 +56,39 @@ class itemController extends Controller
             'kategori_id' => 'required|max:20'
         ]);
 
-        if($request->file('gambar')){
-            $validateData['gambar'] = $request->file('gambar')->store('gambar-produk');
+        DB::beginTransaction();
+        try {
+            $validateData['slug'] = urlencode($validateData['nama']);
+            if ($request->file('gambar') != null) {
+                $name = str_replace(
+                    ' ',
+                    '_',
+                    $request->nama
+                );
+                $img = $name . '.' . $request->file('gambar')->extension();
+                $request->file('gambar')->storeAs('public/gambar_produk', $img);
+            } else {
+                $img = null;
+            }
+            $validateData['gambar'] = $img;
+
+            Item::Create($validateData);
+            
+            DB::commit();
+            return redirect('/items')->with('success', 'barang berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            DB::rollback();
+            File::delete(storage_path('app/public') . '/' . $img);
+            return redirect('/items')->with('error', 'barang gagal ditambahkan!');
         }
-        
-        $validateData['slug'] = urlencode($validateData['nama']);
-        // dd($validateData);
-
-        Item::Create($validateData);
-
-        // $request->session()->flash('success', 'Registrasi Berhasil! Silahkan Login!');
-
-        return redirect('/items')->with('success', 'Produk berhasil ditambahkan!');
     }
 
     public function delete($id)
     {
         // User::destroy($user->id);
-        Item::where('id', $id)->delete();
+        $item = Item::findOrFail($id);
+        File::delete(storage_path('app/public') . '/' . $item->gambar);
+        $item->delete();
 
         // $request->session()->flash('success', 'Registrasi Berhasil! Silahkan Login!');
 
@@ -105,13 +122,6 @@ class itemController extends Controller
         if($request->file('gambar')){
             $validateData['gambar'] = $request->file('gambar')->store('gambar-produk');
         }
-        
-        // ddd($rules);
-        
-        
-        // dd($validateData);
-
-
         
         Item::where('slug', $item->slug)->update($validateData);
 

@@ -46,7 +46,7 @@
                     <td>{{ $item['nama'] }}</td>
                     <td>{{ $item['kuantitas'] }}</td>
                     <td>{{ $item['harga'] }}</td>
-                    <td><img src="{{ asset('storage/gambar-produk') . '/' . $item->gambar }}" width="100"></td>
+                    <td><img src="{{ asset('storage/gambar_produk') . '/' . $item->gambar }}" width="100"></td>
                     @foreach ($kategoris as $kate)
                       @if ($kate->id == $item['kategori_id'])
                         <td>

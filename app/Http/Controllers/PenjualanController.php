@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\Item;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cookie;
+use PDF;
 
 class PenjualanController extends Controller
 {
@@ -146,6 +147,9 @@ class PenjualanController extends Controller
     // dd($validateData);
 
     Penjualan::Create($validateData);
+
+        $pdf = PDF::loadview('pegawai_pdf', ['pegawai' => $pegawai]);
+        return $pdf->download('laporan-pegawai-pdf');
 
     // $request->session()->flash('success', 'Registrasi Berhasil! Silahkan Login!');
 
