@@ -38,6 +38,9 @@
     p {
         margin-bottom: 0;
     }
+    .isi {
+        padding: 0 10px
+    }
 
 </style>
 
@@ -45,8 +48,8 @@
     <div class="center">
         <div class="header">
             <h1>TOKO ABCDE</h1>
-            <p>jl. blblablanbla</p>
-            <p>082123456789</p>
+            <p>#{{$barangs->id}}</p>
+            <p>jl. blblablanbla | 082123456789</p>
         </div>
         <table>
             <tr>
@@ -56,12 +59,29 @@
                 <th>Harga</th>
                 <th>Jumlah</th>
             </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+            @foreach ($barangs->barang as $barang)
+                <tr class="isi">
+                    <td style="text-align: center">{{$loop->index + 1}}</td>
+                    <td>{{$barang->nama}}</td>
+                    <td>{{$barang->jumlah}}</td>
+                    <td>{{$barang->harga}}</td>
+                    <td style="text-align: right">{{$barang->total}}</td>
+                </tr>
+            @endforeach
+            <tr class="isi">
+                <td colspan="4" style="text-align: right">Total</td>
+                <td style="text-align: right">
+                    @php
+                        $total = 0;
+                    @endphp
+                    @foreach ($barangs->barang as $barang)
+                        @php
+                            $total += $barang->total;
+                        @endphp
+                    @endforeach
+                    {{$total}}
+                    
+                </td>
             </tr>
         </table>
     </div>

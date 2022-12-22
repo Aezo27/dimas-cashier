@@ -104,16 +104,14 @@ Route::post('/tambah-produk-keluar', [ProdukKeluarController::class, 'store']);
 
 
 Route::get('/transaksi', [PenjualanController::class, 'index']);
-Route::post('/transaksi', [PenjualanController::class, 'store']);
+Route::post('/transaksi', [PenjualanController::class, 'store'])->name('simpan_kasir');
+Route::get('/download-pdf', [PenjualanController::class, 'download'])->name('download_pdf');
 Route::get('/get-kasir', [PenjualanController::class, 'get_kasir'])->name('get_kasir');
 Route::post('/get-kasir/{id}', [PenjualanController::class, 'set_kasir'])->name('set_kasir');
 Route::get('get-kasir/datatable', [PenjualanController::class, 'get_kasir_datatable'])->name('get_kasir.datatable');
 Route::get('transaksi/get-barang', [PenjualanController::class, 'get_barang'])->name('kasir.get_barang');
 Route::post('update-kasir/{id}', [PenjualanController::class, 'update_kasir'])->name('update_kasir');
 Route::get('delete-kasir/{id}', [PenjualanController::class, 'delete_kasir'])->name('delete_kasir');
-
-
-Route::get('/get_kasir', [PenjualanController::class, 'get_kasir']);
 
 Route::get('/laporan', function () {
   return view('Laporan', [

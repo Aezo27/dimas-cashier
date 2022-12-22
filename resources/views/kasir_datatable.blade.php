@@ -18,7 +18,7 @@
           <td>{{ $data['nama'] }}</td>
           <td class="harga" data-harga="{{ $data['harga'] }}">{{ $data['harga'] }}</td>
           <td class="jumlah">
-            <input type="number" class="form-control jml" id="tf2" min="0" max="30" step="1" data-id="{{ $data['id'] }}" name="jml" value="{{ $data['jumlah'] }}" placeholder="">
+            <input type="number" class="form-control jml" id="tf2" min="0" max="{{ $data['stok'] }}" step="1" data-id="{{ $data['id'] }}" name="jml" value="{{ $data['jumlah'] }}" placeholder="">
             <input type="hidden" value="{{ $data['stok'] }}">
           </td>
           <td style="font-weight: bold" data-total="{{ $data['total'] }}" class="total">{{ $data['total'] }}</td>

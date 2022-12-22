@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\Item;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 use PDF;
 
 class PenjualanController extends Controller
@@ -79,7 +80,7 @@ class PenjualanController extends Controller
       "jumlah" => $request->jumlah,
       "harga" => $barang->harga,
       "stok" => $barang->kuantitas,
-      "total" => $barang->harga * 1
+      "total" => $barang->harga * $request->jumlah
     ];
     $array_json = json_encode($data);
     Cookie::queue('transaksi', $array_json, $lifetime);
@@ -120,40 +121,50 @@ class PenjualanController extends Controller
     }
   }
 
-  public function store(Request $request, Item $item)
+  public function store(Request $req)
   {
-    $rules = ([
-      'no_invoice' => 'required',
-      'produk_id' => 'required',
-      'kuantitas' => 'required|max:255',
-      'harga' => 'required',
-      'subtotal' => 'max:20'
-    ]);
+        $data = json_decode($this->get_kasir());
+        DB::beginTransaction();
+        try {
 
-    // $request->subtotal = $request->harga * $request->kuantitas;
+            foreach ($data->barang as $barang) {
+                $thisBarang =  item::where('id', $barang->id)->first();
+                $bp =  new Penjualan();
+                $bp->no_invoice = $data->id;
+                $bp->customer_id = $req->customer_id;
+                $bp->produk_id = $barang->id;
+                $bp->harga = $barang->harga;
+                $bp->kuantitas = $barang->jumlah;
+                $bp->subtotal = $barang->total;
+                $bp->save();
 
-    // dd($request->subtotal);
+                // update stok
+                $thisBarang->kuantitas -= $barang->jumlah;
+                $thisBarang->save();
+            }
 
+            Cookie::queue(
+                Cookie::forget('transaksi')
+            );
 
+            DB::commit();
+            return [
+                'notif'     => 'Berhasil disimpan',
+                'alert'     => 'success'
+            ];
+        } catch (\Exception $e) {
+            DB::rollback();
+            return [
+                'notif'     => 'Gagal disimpan!',
+                'alert'     => 'error'
+            ];
+        }
+  }
 
-    $product = Item::findOrFail($request->produk_id);
-    $product->kuantitas -= $request->kuantitas;
-    $product->save();
-
-    $validateData = $request->validate($rules);
-
-
-    $validateData['subtotal'] = $validateData['harga'] * $validateData['kuantitas'];
-    // dd($validateData);
-
-    Penjualan::Create($validateData);
-
-        $pdf = PDF::loadview('pegawai_pdf', ['pegawai' => $pegawai]);
-        return $pdf->download('laporan-pegawai-pdf');
-
-    // $request->session()->flash('success', 'Registrasi Berhasil! Silahkan Login!');
-
-    return redirect('/transaksi')->with('success', 'Produk berhasil ditambahkan!');
+  public function download(){
+        $data = json_decode($this->get_kasir());
+        $pdf = PDF::loadview('nota', ['barangs' => $data]);
+        return $pdf->download('nota_transaksi#' . $data->id);
   }
 
   public function get_barang(Request $request)
