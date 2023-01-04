@@ -322,32 +322,31 @@
       $('#simpan').on('click', function(e) {
         e.preventDefault();
         if ($('#customer_id').val() == '') {
-            Toast.fire({
-                icon: 'error',
-                title: 'Harap pilih customer terlebih dahulu!!'
-            });
+          Toast.fire({
+            icon: 'error',
+            title: 'Harap pilih customer terlebih dahulu!!'
+          });
         } else {
-            window.open('{{route("download_pdf")}}', '_blank');
-            setTimeout(() => {
-                $.ajax({
-                  url: "{{route('simpan_kasir')}}",
-                  type: "post",
-                  data: {
-                    'total': $('#total-all').attr('data-all'),
-                    'customer_id': $('#customer_id').val(),
-                  },
-                  headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                  },
-                  success: function(response) {
-                    location.reload();
-                  }
-                });
-            }, 1000);
+          window.open('{{ route('download_pdf') }}', '_blank');
+          setTimeout(() => {
+            $.ajax({
+              url: "{{ route('simpan_kasir') }}",
+              type: "post",
+              data: {
+                'total': $('#total-all').attr('data-all'),
+                'customer_id': $('#customer_id').val(),
+              },
+              headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+              success: function(response) {
+                location.reload();
+              }
+            });
+          }, 1000);
         }
       });
 
     });
   </script>
 @endpush
-w

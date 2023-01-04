@@ -123,48 +123,49 @@ class PenjualanController extends Controller
 
   public function store(Request $req)
   {
-        $data = json_decode($this->get_kasir());
-        DB::beginTransaction();
-        try {
+    $data = json_decode($this->get_kasir());
+    DB::beginTransaction();
+    try {
 
-            foreach ($data->barang as $barang) {
-                $thisBarang =  item::where('id', $barang->id)->first();
-                $bp =  new Penjualan();
-                $bp->no_invoice = $data->id;
-                $bp->customer_id = $req->customer_id;
-                $bp->produk_id = $barang->id;
-                $bp->harga = $barang->harga;
-                $bp->kuantitas = $barang->jumlah;
-                $bp->subtotal = $barang->total;
-                $bp->save();
+      foreach ($data->barang as $barang) {
+        $thisBarang =  item::where('id', $barang->id)->first();
+        $bp =  new Penjualan();
+        $bp->no_invoice = $data->id;
+        $bp->customer_id = $req->customer_id;
+        $bp->produk_id = $barang->id;
+        $bp->harga = $barang->harga;
+        $bp->kuantitas = $barang->jumlah;
+        $bp->subtotal = $barang->total;
+        $bp->save();
 
-                // update stok
-                $thisBarang->kuantitas -= $barang->jumlah;
-                $thisBarang->save();
-            }
+        // update stok
+        $thisBarang->kuantitas -= $barang->jumlah;
+        $thisBarang->save();
+      }
 
-            Cookie::queue(
-                Cookie::forget('transaksi')
-            );
+      Cookie::queue(
+        Cookie::forget('transaksi')
+      );
 
-            DB::commit();
-            return [
-                'notif'     => 'Berhasil disimpan',
-                'alert'     => 'success'
-            ];
-        } catch (\Exception $e) {
-            DB::rollback();
-            return [
-                'notif'     => 'Gagal disimpan!',
-                'alert'     => 'error'
-            ];
-        }
+      DB::commit();
+      return [
+        'notif'     => 'Berhasil disimpan',
+        'alert'     => 'success'
+      ];
+    } catch (\Exception $e) {
+      DB::rollback();
+      return [
+        'notif'     => 'Gagal disimpan!',
+        'alert'     => 'error'
+      ];
+    }
   }
 
-  public function download(){
-        $data = json_decode($this->get_kasir());
-        $pdf = PDF::loadview('nota', ['barangs' => $data]);
-        return $pdf->download('nota_transaksi#' . $data->id);
+  public function download()
+  {
+    $data = json_decode($this->get_kasir());
+    $pdf = PDF::loadview('nota', ['barangs' => $data]);
+    return $pdf->download('nota_transaksi#' . $data->id);
   }
 
   public function get_barang(Request $request)

@@ -8,6 +8,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProdukMasukController;
 use App\Http\Controllers\ProdukKeluarController;
 use App\Http\Controllers\PenjualanController;
@@ -113,8 +114,10 @@ Route::get('transaksi/get-barang', [PenjualanController::class, 'get_barang'])->
 Route::post('update-kasir/{id}', [PenjualanController::class, 'update_kasir'])->name('update_kasir');
 Route::get('delete-kasir/{id}', [PenjualanController::class, 'delete_kasir'])->name('delete_kasir');
 
-Route::get('/laporan', function () {
-  return view('Laporan', [
-    "title" => "laporan"
-  ]);
-});
+Route::get('/laporan-keluar', [LaporanController::class, 'lap_keluar'])->name('lap_keluar');
+Route::get('/cetak_keluar', [LaporanController::class, 'cetak_keluar'])->name('cetak_keluar');
+Route::post('/export_keluar', [LaporanController::class, 'export_keluar'])->name('export_keluar');
+
+Route::get('/laporan-masuk', [LaporanController::class, 'lap_masuk'])->name('lap_masuk');
+Route::get('/cetak_masuk', [LaporanController::class, 'cetak_masuk'])->name('cetak_masuk');
+Route::post('/export_masuk', [LaporanController::class, 'export_masuk'])->name('export_masuk');
