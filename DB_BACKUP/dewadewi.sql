@@ -11,7 +11,7 @@
  Target Server Version : 100421
  File Encoding         : 65001
 
- Date: 20/12/2022 08:59:21
+ Date: 05/01/2023 10:46:45
 */
 
 SET NAMES utf8mb4;
@@ -79,8 +79,8 @@ CREATE TABLE `items`  (
 -- ----------------------------
 -- Records of items
 -- ----------------------------
-INSERT INTO `items` VALUES (1, 1, 'Test', 'Test', 20000, 400, NULL, '2022-12-11 10:58:04', '2022-12-11 12:21:45');
-INSERT INTO `items` VALUES (2, 1, 'Beras', 'Beras', 10000, 200, 'gambar-produk/nNTja1WDlMC1XLlIpbKdkxkZ14xTzt3PmVcUwMx4.png', '2022-12-17 11:52:33', '2022-12-17 11:52:33');
+INSERT INTO `items` VALUES (1, 1, 'Test', 'Test', 20000, 399, NULL, '2022-12-11 10:58:04', '2023-01-02 15:16:27');
+INSERT INTO `items` VALUES (2, 1, 'Beras', 'Beras', 10000, 299, 'gambar-produk/nNTja1WDlMC1XLlIpbKdkxkZ14xTzt3PmVcUwMx4.png', '2022-12-17 11:52:33', '2023-01-04 12:28:23');
 
 -- ----------------------------
 -- Table structure for kategoris
@@ -197,12 +197,15 @@ CREATE TABLE `penjualans`  (
   `subtotal` bigint NOT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
+  `customer_id` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of penjualans
 -- ----------------------------
+INSERT INTO `penjualans` VALUES (1, 2, '1752461707995719', 1, 10000, 10000, '2023-01-02 13:18:30', '2023-01-02 13:18:30', 1);
+INSERT INTO `penjualans` VALUES (3, 1, '1753916911199045', 1, 20000, 20000, '2022-12-25 15:16:27', '2022-12-25 15:16:27', 1);
 
 -- ----------------------------
 -- Table structure for personal_access_tokens
@@ -260,12 +263,13 @@ CREATE TABLE `produk_masuks`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of produk_masuks
 -- ----------------------------
 INSERT INTO `produk_masuks` VALUES (1, 1, 1, 200, '2022-12-11', '2022-12-11 12:21:14', '2022-12-11 12:21:14');
+INSERT INTO `produk_masuks` VALUES (2, 2, 1, 100, '2023-01-04', '2023-01-04 12:28:23', '2023-01-04 12:28:23');
 
 -- ----------------------------
 -- Table structure for suppliers
@@ -310,5 +314,53 @@ CREATE TABLE `users`  (
 -- Records of users
 -- ----------------------------
 INSERT INTO `users` VALUES (1, 'admin', 'admin@gmail.com', '$2y$10$i2bOGlk6uAP5rOmIHDCdUeWMX5/A7xSSA1UpyBCxlwCE1n0O8CAea', 'staff', 1, '', '2022-07-18 06:52:14', '2022-07-18 06:52:14');
+
+-- ----------------------------
+-- View structure for lap_juals
+-- ----------------------------
+DROP VIEW IF EXISTS `lap_juals`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `lap_juals` AS SELECT
+	penjualans.id, 
+	penjualans.no_invoice, 
+	items.nama, 
+	penjualans.kuantitas, 
+	penjualans.harga, 
+	penjualans.subtotal, 
+	customers.nama AS nama_pembeli, 
+	penjualans.created_at, 
+	penjualans.updated_at
+FROM
+	penjualans
+	INNER JOIN
+	items
+	ON 
+		penjualans.produk_id = items.id
+	INNER JOIN
+	customers
+	ON 
+		penjualans.customer_id = customers.id ;
+
+-- ----------------------------
+-- View structure for lap_masuks
+-- ----------------------------
+DROP VIEW IF EXISTS `lap_masuks`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `lap_masuks` AS SELECT
+	produk_masuks.id, 
+	items.nama, 
+	suppliers.nama AS nama_suplier, 
+	produk_masuks.kuantitas, 
+	items.harga, 
+	(items.harga * produk_masuks.kuantitas) as total,
+	produk_masuks.tanggal_masuk
+FROM
+	produk_masuks
+	INNER JOIN
+	items
+	ON 
+		produk_masuks.produk_id = items.id
+	INNER JOIN
+	suppliers
+	ON 
+		produk_masuks.supplier_id = suppliers.id ;
 
 SET FOREIGN_KEY_CHECKS = 1;
