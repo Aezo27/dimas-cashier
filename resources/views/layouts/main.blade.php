@@ -66,7 +66,7 @@
       </a>
     </div><!-- End Logo -->
 
-    <div class="search-bar">
+    {{-- <div class="search-bar">
       <form class="search-form d-flex align-items-center" method="POST" action="#">
         <input type="text" name="query" placeholder="Search" title="Enter search keyword">
         <button type="submit" title="Search"><i class="bi bi-search"></i></button>
@@ -77,7 +77,7 @@
     <form action="/logout" method="POST">
       @csrf
       <button type="submit" class="d-none d-md-block ps-2"><i class="bi bi-box-arrow-in-right"></i></button>
-    </form>
+    </form> --}}
 
     <nav class="header-nav ms-auto">
       <ul class="navbar-nav ms-auto">

@@ -3,15 +3,15 @@
 
  Source Server         : localhost
  Source Server Type    : MySQL
- Source Server Version : 100421
+ Source Server Version : 100427
  Source Host           : localhost:3306
  Source Schema         : dewadewi
 
  Target Server Type    : MySQL
- Target Server Version : 100421
+ Target Server Version : 100427
  File Encoding         : 65001
 
- Date: 05/01/2023 10:46:45
+ Date: 09/03/2023 03:24:54
 */
 
 SET NAMES utf8mb4;
@@ -31,12 +31,13 @@ CREATE TABLE `customers`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `customers_email_unique`(`email`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of customers
 -- ----------------------------
-INSERT INTO `customers` VALUES (1, 'Aezo27', 'Solo', 'admin@odama.io', 82134626598, '2022-12-11 12:20:18', '2022-12-11 12:20:18');
+INSERT INTO `customers` VALUES (1, 'Aezo27', 'Solo', 'admin@odama.io', 82134626598, '2022-12-09 12:20:18', '2022-12-11 12:20:18');
+INSERT INTO `customers` VALUES (2, 'Rama Sullivan', 'Solo', 'ramasullivan27@gmail.com', 82134626598, '2023-03-09 12:20:18', '2023-03-09 12:20:18');
 
 -- ----------------------------
 -- Table structure for failed_jobs
@@ -52,7 +53,7 @@ CREATE TABLE `failed_jobs`  (
   `failed_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `failed_jobs_uuid_unique`(`uuid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of failed_jobs
@@ -74,13 +75,13 @@ CREATE TABLE `items`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `items_slug_unique`(`slug`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of items
 -- ----------------------------
 INSERT INTO `items` VALUES (1, 1, 'Test', 'Test', 20000, 399, NULL, '2022-12-11 10:58:04', '2023-01-02 15:16:27');
-INSERT INTO `items` VALUES (2, 1, 'Beras', 'Beras', 10000, 299, 'gambar-produk/nNTja1WDlMC1XLlIpbKdkxkZ14xTzt3PmVcUwMx4.png', '2022-12-17 11:52:33', '2023-01-04 12:28:23');
+INSERT INTO `items` VALUES (2, 1, 'Beras', 'Beras', 10000, 298, 'test.png', '2022-12-17 11:52:33', '2023-03-05 01:46:22');
 
 -- ----------------------------
 -- Table structure for kategoris
@@ -93,7 +94,7 @@ CREATE TABLE `kategoris`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `kategoris_nama_unique`(`nama`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of kategoris
@@ -113,7 +114,7 @@ CREATE TABLE `laporans`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of laporans
@@ -135,7 +136,7 @@ CREATE TABLE `migrations`  (
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of migrations
@@ -163,7 +164,7 @@ CREATE TABLE `password_resets`  (
   `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   INDEX `password_resets_email_index`(`email`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of password_resets
@@ -178,7 +179,7 @@ CREATE TABLE `penggunas`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of penggunas
@@ -199,13 +200,15 @@ CREATE TABLE `penjualans`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `customer_id` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of penjualans
 -- ----------------------------
-INSERT INTO `penjualans` VALUES (1, 2, '1752461707995719', 1, 10000, 10000, '2023-01-02 13:18:30', '2023-01-02 13:18:30', 1);
-INSERT INTO `penjualans` VALUES (3, 1, '1753916911199045', 1, 20000, 20000, '2022-12-25 15:16:27', '2022-12-25 15:16:27', 1);
+INSERT INTO `penjualans` VALUES (1, 2, '1752461707995719', 1, 10000, 10000, '2023-03-07 13:18:30', '2023-01-02 13:18:30', 1);
+INSERT INTO `penjualans` VALUES (3, 1, '1753916911199045', 1, 20000, 20000, '2023-03-09 01:16:27', '2022-12-25 15:16:27', 1);
+INSERT INTO `penjualans` VALUES (4, 2, '1753924331553144', 1, 10000, 10000, '2023-03-09 01:46:22', '2023-03-05 01:46:22', 1);
+INSERT INTO `penjualans` VALUES (5, 1, '1753924331553144', 2, 20000, 40000, '2023-03-09 01:46:22', '2023-03-05 01:46:22', 2);
 
 -- ----------------------------
 -- Table structure for personal_access_tokens
@@ -224,7 +227,7 @@ CREATE TABLE `personal_access_tokens`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `personal_access_tokens_token_unique`(`token`) USING BTREE,
   INDEX `personal_access_tokens_tokenable_type_tokenable_id_index`(`tokenable_type`, `tokenable_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personal_access_tokens
@@ -243,7 +246,7 @@ CREATE TABLE `produk_keluars`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of produk_keluars
@@ -263,7 +266,7 @@ CREATE TABLE `produk_masuks`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of produk_masuks
@@ -285,7 +288,7 @@ CREATE TABLE `suppliers`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `suppliers_email_unique`(`email`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of suppliers
@@ -308,12 +311,12 @@ CREATE TABLE `users`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `users_email_unique`(`email`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (1, 'admin', 'admin@gmail.com', '$2y$10$i2bOGlk6uAP5rOmIHDCdUeWMX5/A7xSSA1UpyBCxlwCE1n0O8CAea', 'staff', 1, '', '2022-07-18 06:52:14', '2022-07-18 06:52:14');
+INSERT INTO `users` VALUES (1, 'admin', 'admin@gmail.com', '$2y$10$Z/tUvRBwCHnMnah2Fpjn2ufWOI8D//NmuKWd8dcBahdbZ77Xc3Fjy', 'staff', 1, '', '2022-07-18 06:52:14', '2022-07-18 06:52:14');
 
 -- ----------------------------
 -- View structure for lap_juals
@@ -322,13 +325,15 @@ DROP VIEW IF EXISTS `lap_juals`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `lap_juals` AS SELECT
 	penjualans.id, 
 	penjualans.no_invoice, 
+	items.id AS id_produk, 
 	items.nama, 
 	penjualans.kuantitas, 
 	penjualans.harga, 
 	penjualans.subtotal, 
 	customers.nama AS nama_pembeli, 
 	penjualans.created_at, 
-	penjualans.updated_at
+	penjualans.updated_at, 
+	items.gambar
 FROM
 	penjualans
 	INNER JOIN
@@ -361,6 +366,6 @@ FROM
 	INNER JOIN
 	suppliers
 	ON 
-		produk_masuks.supplier_id = suppliers.id ;
+		produk_masuks.supplier_id = suppliers.id ; ;
 
 SET FOREIGN_KEY_CHECKS = 1;

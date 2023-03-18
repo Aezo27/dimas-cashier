@@ -12,6 +12,7 @@
       <th><b>Jumlah</b></th>
       <th><b>Harga</b></th>
       <th><b>Total</b></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -25,6 +26,7 @@
         <td>{{ $datajual->kuantitas }}</td>
         <td>{{ $datajual->harga }}</td>
         <td>{{ $datajual->subtotal }}</td>
+        <td></td>
       </tr>
     @endforeach
     <tr>
@@ -36,6 +38,8 @@
       <td></td>
       <td></td>
       <td><b>{{ $datajuals->sum('subtotal') }}</b></td>
+      @inject('Terbilang', 'App\Http\Controllers\TerbilangController')
+      <td>{{ ucwords($Terbilang->pembilang($datajuals->sum('subtotal')) . ' rupiah') }}</td>
     </tr>
   </tbody>
 </table>

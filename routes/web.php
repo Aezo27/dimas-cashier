@@ -37,11 +37,11 @@ Route::get('/', function () {
   ]);
 })->middleware('guest');
 
-Route::get('/home', function () {
-  return view('home', [
-    "title" => "Home"
-  ]);
-})->middleware('auth');
+// Route::get('/home', function () {
+//   return view('home', [
+//     "title" => "Home"
+//   ]);
+// })->middleware('auth');
 
 Route::get('/pdf', function () {
   return view('nota');
@@ -58,6 +58,7 @@ Route::post('/register', [RegisterController::class, 'store'])->middleware('gues
 Route::post('/tambah-pengguna', [RegisterController::class, 'store2'])->middleware('admin');
 
 Route::get('/admin', [AdminController::class, 'index'])->middleware('auth');
+Route::get('/home', [AdminController::class, 'index'])->middleware('auth');
 Route::get('/items', [itemController::class, 'index']);
 Route::get('/items/{item:slug}', [itemController::class, 'show']);
 Route::post('/items/{item:slug}', [itemController::class, 'update']);
